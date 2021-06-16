@@ -1,0 +1,559 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .el-card {
+            margin: 5px;
+        }
+
+        .mainText {
+            font-size: 32px;
+            color: #333;
+            font-family: AlipayNumber,sans-serif;
+            display: block;
+            margin-bottom: 1.5rem;
+            margin-top: .5rem;
+            text-indent: .5em;
+        }
+
+        .mainDsc {
+            font-size: 14px;
+            color: #909399;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-row>
+            <!--左边-->
+            <el-col span="18">
+                <el-col span="8">
+                    <el-card class="box-card">
+                
+                        <el-row style="height:280px">
+                            <el-col span="8">
+                                <span class="mainDsc">待处理订单</span>
+                                <span class="mainText">85</span>
+                            </el-col>
+                            <el-col span="8">
+                                <span class="mainDsc">维修订单</span>
+                                <span class="mainText">174</span>
+                            </el-col>
+                            <el-col span="8">
+                                <span class="mainDsc">历史工单</span>
+                                <span class="mainText">14</span>
+                            </el-col>
+                        </el-row>
+
+
+                        <!--<el-row style="text-align:center">
+                            <el-button type="primary" size="mini">新增计划</el-button>
+                            <el-button type="primary" size="mini">新建项目</el-button>
+                            <el-button type="primary" size="mini">组织管理</el-button>
+                        </el-row>-->
+                    </el-card>
+                </el-col>
+
+                <el-col span="16">
+                    <el-card class="box-card">
+                        <div id="c1" style="height:280px"></div>
+                    </el-card>
+                </el-col>
+
+
+                <el-col span="8">
+                    <el-card class="box-card">
+                        <div id="c4" style="height:240px"></div>
+                    </el-card>
+                </el-col>
+                <el-col span="16">
+                    <el-card class="box-card">
+                        <div id="container" style="height:500px"></div>
+                    </el-card>
+                </el-col>
+            </el-col>
+            <!-- 右 -->
+            <el-col span="6">
+                <el-card class="box-card">
+                    <div   id="c2"></div>
+                </el-card>
+
+                <el-card class="box-card">
+                    <div id="c3"  style="height:280px"></div>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="https://gw.alipayobjects.com/os/lib/antv/g2/4.0.14/dist/g2.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.11.1/dist/data-set.js"></script>
+
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=r7DDY0pW7vtUnGOhWHvuSMHRZYu19Dda"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return { visible: false }
+            }
+        })
+
+        //var map = new BMapGL.Map("container");
+        //// 创建地图实例 
+        //var point = new BMapGL.Point(116.404, 39.915);
+        //// 创建点坐标 
+        //map.setMapStyleV2({
+        //    styleId: '0c1521775d687d31bf099b91d3ca13b4'
+        //});
+        //map.centerAndZoom(point, 8);
+        //// 初始化地图，设置中心点坐标和地图级别 
+
+        //const data = [
+        //{ genre: 'Sports', sold: 275 },
+        //{ genre: 'Strategy', sold: 115 },
+        //{ genre: 'Action', sold: 120 },
+        //{ genre: 'Shooter', sold: 350 },
+        //{ genre: 'Other', sold: 150 },
+        // { genre: 'Sports1', sold: 275 },
+        //{ genre: 'Strategy1', sold: 115 },
+        //{ genre: 'Action1', sold: 120 },
+        //{ genre: 'Shooter1', sold: 350 },
+        //{ genre: 'Other1', sold: 150 },
+        // { genre: 'Sports2', sold: 275 },
+        //{ genre: 'Strategy2', sold: 115 },
+        //{ genre: 'Action2', sold: 120 },
+        //{ genre: 'Shooter2', sold: 350 },
+        //{ genre: 'Other2', sold: 150 },
+        //{ genre: 'Sports3', sold: 275 },
+        //{ genre: 'Strategy3', sold: 115 },
+        //{ genre: 'Action3', sold: 120 },
+        //{ genre: 'Shooter3', sold: 350 },
+        //{ genre: 'Other3', sold: 150 },
+        //];
+
+        //// Step 1: 创建 Chart 对象
+        //const chart = new G2.Chart({
+        //    container: 'c1', // 指定图表容器 ID
+        //    width: 800, // 指定图表宽度
+        //    height: 300, // 指定图表高度
+        //});
+
+        //// Step 2: 载入数据源
+        //chart.data(data);
+
+        //// Step 3：创建图形语法，绘制柱状图
+        //chart.interval().position('genre*sold');
+
+        //// Step 4: 渲染图表
+        //chart.render();
+
+
+
+
+
+        //图表二
+        const data1 = [
+  { year: '2002', value: 10 },
+  { year: '2003', value: 20 },
+  { year: '2004', value: 50 },
+  { year: '2005', value: 40 },
+  { year: '2006', value: 50 },
+  { year: '2007', value: 20 },
+  { year: '2008', value: 25 },
+  { year: '2009', value: 70 },
+  { year: '2010', value: 120 },
+  { year: '2011', value: 140 },
+  { year: '2012', value: 80 },
+  { year: '2013', value: 250 },
+  { year: '2014', value: 280 },
+  { year: '2015', value: 400 },
+  { year: '2016', value: 400 },
+  { year: '2017', value: 800 },
+  { year: '2018', value: 1000 }
+        ];
+        const ds1 = new DataSet();
+        const dv1 = ds1.createView().source(data1);
+        dv1.transform({
+            type: 'map',
+            callback: row => {
+                row.year = parseInt(row.year, 10);
+                return row;
+            }
+        }).transform({
+            type: 'regression',
+            method: 'polynomial',
+            fields: ['year', 'value'],
+            bandwidth: 0.1,
+            as: ['Year', 'Value']
+        });
+
+        const chart1 = new G2.Chart({
+            container: 'c1',
+            autoFit: true,
+            height: 500,
+            padding: [20, 40],
+        });
+
+        chart1.scale({
+            Year: {
+                range: [0, 1],
+            },
+            value: {
+                alias: '市值 (亿美元)',
+                sync: true,
+                nice: true
+            },
+            Value: {
+                sync: true,
+                nice: true
+            },
+        });
+        chart1.axis('year', {
+            tickLine: null
+        });
+
+        const view1 = chart1.createView();
+        view1.data(data1);
+        view1
+          .interval()
+          .position('year*value')
+          .style({
+              fillOpacity: 1,
+          });
+
+        const view2 = chart1.createView();
+        view2.axis(false);
+        view2.data(dv1.rows);
+        view2
+          .line()
+          .position('Year*Value')
+          .style({
+              stroke: '#969696',
+              lineDash: [3, 3]
+          })
+          .tooltip(false);
+        view2.annotation().text({
+            content: '趋势线',
+            position: ['min', 'min'],
+            style: {
+                fill: '#8c8c8c',
+                fontSize: 14,
+                fontWeight: 300
+            },
+            offsetY: -140
+        });
+
+        chart1.render();
+
+        //图三
+        const data2 = [
+  { type: 'iPhone12', value: 34 },
+  { type: '华为mate系统', value: 85 },
+  { type: '小米电脑', value: 103 },
+  { type: '口罩', value: 142 },
+  { type: '华为 Mate Xs 5G版', value: 251 },
+  { type: 'Apple iPhone 11 Pro Max', value: 367 },
+  { type: '华为 Mate 30 5G版', value: 491 },
+  { type: '苹果 Apple Watch Series 6', value: 672 },
+  { type: 'GoPro Hero 5 Black', value: 868 },
+  { type: '苹果 20年 13寸 MacBook Air  ', value: 1234 },
+        ];
+        const chart2 = new G2.Chart({
+            container: 'c2',
+            autoFit: true,
+            height: 500,
+        });
+        chart2.data(data2);
+        chart2.scale({
+            value: {
+                max: 1400,
+                min: 0,
+                alias: '销量（百万）',
+            },
+        });
+        chart2.axis('type', {
+            title: null,
+            tickLine: null,
+            line: null,
+        });
+
+        chart2.axis('value', {
+            label: null,
+            title: {
+                offset: 30,
+                style: {
+                    fontSize: 12,
+                    fontWeight: 300,
+                },
+            },
+        });
+        chart2.legend(false);
+        chart2.coordinate().transpose();
+        chart2
+          .interval()
+          .position('type*value')
+          .size(26)
+          .label('value', {
+              style: {
+                  fill: '#8d8d8d',
+              },
+              offset: 10,
+          });
+        chart2.interaction('element-active');
+        chart2.render();
+
+
+
+        //图4
+        const data3 = [
+          { item: '系统输出', count: 40, percent: 0.4 },
+          { item: '门店收入', count: 21, percent: 0.21 },
+          { item: '回收业务', count: 17, percent: 0.17 },
+          { item: '维修服务', count: 13, percent: 0.13 },
+          { item: '电商营收', count: 9, percent: 0.09 },
+        ];
+        const chart3 = new G2.Chart({
+            container: 'c3',
+            autoFit: true,
+            height: 500,
+        });
+        chart3.data(data3);
+        chart3.scale('percent', {
+            formatter: (val) => {
+                val = val * 100 + '%';
+                return val;
+            },
+        });
+        chart3.coordinate('theta', {
+            radius: 0.75,
+            innerRadius: 0.6,
+        });
+        chart3.tooltip({
+            showTitle: false,
+            showMarkers: false,
+            itemTpl: '<li class="g2-tooltip-list-item"><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>',
+        });
+        // 辅助文本
+        chart3
+          .annotation()
+          .text({
+              position: ['50%', '50%'],
+              content: '月度营收',
+              style: {
+                  fontSize: 14,
+                  fill: '#8c8c8c',
+                  textAlign: 'center',
+              },
+              offsetY: -20,
+          })
+          .text({
+              position: ['50%', '50%'],
+              content: '1890',
+              style: {
+                  fontSize: 20,
+                  fill: '#8c8c8c',
+                  textAlign: 'center',
+              },
+              offsetX: -10,
+              offsetY: 20,
+          })
+          .text({
+              position: ['50%', '50%'],
+              content: '万',
+              style: {
+                  fontSize: 14,
+                  fill: '#8c8c8c',
+                  textAlign: 'center',
+              },
+              offsetY: 20,
+              offsetX: 20,
+          });
+        chart3
+          .interval()
+          .adjust('stack')
+          .position('percent')
+          .color('item')
+          .label('percent', (percent) => {
+              return {
+                  content: (data) => {
+                      return `${data.item}: ${percent * 100}%`;
+                  },
+              };
+          })
+          .tooltip('item*percent', (item, percent) => {
+              percent = percent * 100 + '%';
+              return {
+                  name: item,
+                  value: percent,
+              };
+          });
+
+        chart3.interaction('element-active');
+
+        chart3.render();
+
+        //图5
+
+        fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/blockchain.json')
+          .then(res => res.json())
+          .then(data4 => {
+              const chart4 = new G2.Chart({
+                  container: 'c4',
+                  autoFit: true,
+                  height: 500,
+                  padding: [30, 20, 70, 30]
+              });
+
+              chart4.data(data4);
+              chart4.scale({
+                  nlp: {
+                      min: 0,
+                      max: 100
+                  },
+                  blockchain: {
+                      min: 0,
+                      max: 100
+                  }
+              });
+
+              chart4.axis('nlp', false);
+
+              chart4.legend({
+                  custom: true,
+                  items: [
+                    { name: 'blockchain', value: 'blockchain', marker: { symbol: 'line', style: { stroke: '#1890ff', lineWidth: 2 } } },
+                    { name: 'nlp', value: 'nlp', marker: { symbol: 'line', style: { stroke: '#2fc25b', lineWidth: 2 } } },
+                  ],
+              });
+
+              chart4.line().position('date*blockchain').color('#1890ff');
+              chart4.line().position('date*nlp').color('#2fc25b');
+
+              chart4.annotation().dataMarker({
+                  top: true,
+                  position: ['2016-02-28', 9],
+                  text: {
+                      content: 'Blockchain 首超 NLP',
+                      style: {
+                          textAlign: 'left',
+                      },
+                  },
+                  line: {
+                      length: 30,
+                  },
+              });
+              chart4.annotation().dataMarker({
+                  top: true,
+                  position: ['2017-12-17', 100],
+                  line: {
+                      length: 30,
+                  },
+                  text: {
+                      content: '2017-12-17, 受比特币影响，\n blockchain搜索热度达到顶峰\n峰值：100',
+                      style: {
+                          textAlign: 'right',
+                      }
+                  },
+              });
+              chart4.removeInteraction('legend-filter'); // 自定义图例，移除默认的分类图例筛选交互
+              chart4.render();
+          });
+
+        //图6
+        fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/world.geo.json')
+  .then((res) => res.json())
+  .then((data5) => {
+      const ds5 = new DataSet();
+      const dv5 = ds5.createView('back').source(data5, {
+          type: 'GeoJSON',
+      });
+      const userData = [
+        { name: 'Russia', value: 86.8 },
+        { name: 'China', value: 106.3 },
+        { name: 'Japan', value: 94.7 },
+        { name: 'Mongolia', value: 98 },
+        { name: 'Canada', value: 98.4 },
+        { name: 'United Kingdom', value: 97.2 },
+        { name: 'United States of America', value: 98.3 },
+        { name: 'Brazil', value: 96.7 },
+        { name: 'Argentina', value: 95.8 },
+        { name: 'Algeria', value: 101.3 },
+        { name: 'France', value: 94.8 },
+        { name: 'Germany', value: 96.6 },
+        { name: 'Ukraine', value: 86.3 },
+        { name: 'Egypt', value: 102.1 },
+        { name: 'South Africa', value: 101.3 },
+        { name: 'India', value: 107.6 },
+        { name: 'Australia', value: 99.9 },
+        { name: 'Saudi Arabia', value: 130.1 },
+        { name: 'Afghanistan', value: 106.5 },
+        { name: 'Kazakhstan', value: 93.4 },
+        { name: 'Indonesia', value: 101.4 },
+      ];
+      const userDv = ds5
+        .createView()
+        .source(userData)
+        .transform({
+            geoDataView: dv5,
+            field: 'name',
+            type: 'geo.centroid',
+            as: ['longitude', 'latitude'],
+        });
+      const chart5 = new G2.Chart({
+          container: 'container',
+          autoFit: true,
+          height: 500,
+      });
+      chart5.scale({
+          longitude: {
+              sync: true,
+          },
+          latitude: {
+              sync: true,
+          },
+      });
+      chart5.axis(false);
+
+      chart5.legend({ position: 'right' });
+      chart5.tooltip({
+          showTitle: false,
+          showMarkers: false
+      });
+      const bgView = chart5.createView();
+      bgView.data(dv5.rows);
+      bgView.tooltip(false);
+      bgView
+        .polygon()
+        .position('longitude*latitude')
+        .color('#ebedf0')
+        .style({
+            lineWidth: 1,
+            stroke: '#fafbfc',
+        });
+
+      const userView = chart5.createView();
+      userView.data(userDv.rows);
+      userView
+        .point()
+        .position('longitude*latitude')
+        .color('#1890ff')
+        .shape('circle')
+        .size('value', [5, 15])
+        .style({
+            lineWidth: 1,
+            stroke: '#1890ff',
+        });
+      userView.interaction('element-active');
+      chart5.render();
+  });
+
+
+    </script>
+</body>
+</html>
